@@ -2,7 +2,7 @@ const { src, dest, watch, parallel, series } = require('gulp');
 
 const scss         = require('gulp-sass')(require('sass'));
 const concat       = require('gulp-concat');
-const autoprefixer = require('gulp-autoprefixer');
+const autoprefixer = require('gulp-autoprefixer').default;
 const uglify       = require('gulp-uglify');
 const imagemin     = require('gulp-imagemin');
 const del          = require('del');
@@ -31,13 +31,10 @@ function styles() {
 }
 
 function scripts() {
-  return src([
-    // 'node_modules/jquery/dist/jquery.js',
-    'app/js/main.js'
-  ])
-    .pipe(concat('main.min.js'))
-    .pipe(uglify())
-    .pipe(dest('app/js'))
+  return src('app/js/**/*.js')
+    // .pipe(concat('main.min.js'))
+    // .pipe(uglify())
+    // .pipe(dest('app/js'))
     .pipe(browserSync.stream())
 }
 
@@ -72,7 +69,7 @@ function cleanDist () {
 
 function watching() {
   watch(['app/scss/**/*.scss'], styles);
-  watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
+  watch(['app/js/**/*.js'], scripts);
   watch(['app/**/*.html']).on('change', browserSync.reload);
 }
 
